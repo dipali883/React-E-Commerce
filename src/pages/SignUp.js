@@ -3,6 +3,7 @@ import loginIcons from '../assest/signin.gif'
 import { FaEyeSlash } from "react-icons/fa"
 import { FaEye } from "react-icons/fa"
 import { Link } from 'react-router-dom';
+import imageTobase64 from "../helpers/imageToBase64";
 
 
 const Login = () => {
@@ -27,15 +28,40 @@ const Login = () => {
     e.preventDefault();
   }
 
+  const handleUploadPic = async(e) =>{
+    const file = e.target.files[0]
+    
+    const imagePic = await imageTobase64(file)
+    
+    setData((preve)=>{
+      return{
+        ...preve,
+        profilePic : imagePic
+      }
+    })
+
+  }
+
   console.log("data login",data)
 
   return (
     <section id='login'>
       <div className='mx-auto container p-4'>
         <div className='bg-white p-5 w-full max-w-sm mx-auto'>
-          <div className='w-20 h-20 mx-auto'>
-            <img src={loginIcons} alt='login icons'/>
-          </div>
+          <div className='w-20 h-20 mx-auto relative overflow-hidden rounded-full'>
+            <div>
+                <img src={data.profilePic || loginIcons} alt='login icons'/>
+            </div>
+            <form>
+              <label>
+                <div className='text-xs bg-opacity-80 bg-slate-200 pb-4 pt-2 cursor-pointer text-center absolute bottom-0 w-full'>
+                  Upload  Photo
+                </div>
+                <input type='file' className='hidden' onChange={handleUploadPic}/>
+              </label>
+            </form>
+        </div>
+
   
           <form className='pt-6 flex flex-col gap-2' onSubmit={handleSubmit}>
             <div className='grid'>
@@ -110,8 +136,8 @@ const Login = () => {
               </div>
           </div>
   
-              <button className='bg-red-600 hover:bg-red-700 text-white px-6 py-2 w-full max-w-[150px] rounded-full hover:scale-110 transition-all mx-auto block mt-6'>Login</button>
-          </form>
+              <button className='bg-red-600 hover:bg-red-700 text-white px-6 py-2 w-full max-w-[150px] rounded-full hover:scale-110 transition-all mx-auto block mt-6'>Sign Up</button>
+          </form> 
 
           <p className='my-5'>Don't have account ? <Link to={"/sign-up"} className=' text-red-600 hover:text-red-700 hover:underline'>Sign up</Link></p>
           </div>
